@@ -1,23 +1,26 @@
-Chronic_health_impacts.R is used to estimate the chronic premature mortalities attributable to Canadian wildfire-related PM2.5 exposure.
+Chronic_health_impacts.R is used to estimate the chronic premature moralities attributable to Canadian wildfire-related PM2.5 exposure.
 
 1. System requirements
 R x64 3.5.1 and RStudio 2023.03.0 were used to create and test this code.
 
 2. Installation guide
-No additional package is needed for running this code.
+The R packages "FNN 1.1.3.2" are required to run this code. This packages could be downloaded and installed by the install.packages("FNN") command in R within about 1 minute.
 
 3. Demo data
-The demo data package (Demo_input_data_chronic_ health_impacts.zip) includes data used for estimating chronic premature deaths in Canada and the U.S. which attributed to PM2.5 from Canadian wildfires on 2023. PM25Annual_NA_Grid_2023_GFED_Fire.csv contains the estimated annual mean concentration of PM2.5 from all sources and Canadian wildfires in Canada and the U.S. on 2023 (parameter name "Pred_All" and "Pred_CAN"). Only grids meet the following criteria were selected for estimating chronic health impacts: areas with Canadian-wildfire-related PM2.5 exposure > 0.37 μg m–3 (a log-normal distribution with a 90th percentile value of total gridded dataset for monthly mean PM2.5 exposure dataset related to Canadian wildfires for the years of 2017, 2021, and 2023) lasting for at least three months in all three years. Pop_2023_NA_Region_Grid.csv contains the gridded total population of Canada and the U.S (parameter name "Pop"). IHME-GBD_2019_DATA-NA_AllDeath.csv contains the national all-cause baseline death rate from GBD study of Canada and the U.S (parameter name "val").
+The demo data package (Demo_input_data_chronic_ health_impacts.zip) includes data used for estimating chronic premature deaths in Canada and the U.S. in 2023 due to exposure to the 2023 Canadian wildfires. AnnualExposure_NA_Grid_PM25_FirebySource_2023_GFED.csv contains the annual average source specific PM2.5 concentration served as chronic PM2.5 exposure in Canada and the U.S. Files in mrbrt/ contains cause-specific exposure-response function from GBD study. IHME-GBD_2019_DATA-Global_death.csv that contains national cause- and age- specific baseline mortality from GBD study. Pop_2023_NA_Grid_byAge.csv that contains gridded age-specific population data of Canada and the U.S.
 
 4. Run the code
 When running the code, please update the path, unzip the demo data package, and run the R code. The pseudocode is described below.
-a) matching the chronic exposure with population and baseline death rate at grid level 
-b) calculate the relative risk of each grid according to the exposure level 
-c) calculate the number of deaths according to the relative risk, population, and baseline death rate at grid level
-d) sum the number of deaths in grids belong to the same region
-The expected run time for the demo data is less than 1 minutes.
+loop through death causes
+  loop through age groups
+   a) matching the chronic exposure with population and baseline death rate of specific age group and cause at grid level 
+   b) search and calculate the relative risk of each grid in the cause-specific risk file according to the exposure level 
+   c) calculate the number of deaths according to the relative risk, population, proportion of Canadian fire PM2.5 in total PM2.5, and baseline death rate at grid level
+   d) sum the number of deaths in grids belong to the same country
+  stop loop
+stop loop
+The expected run time with the demo data is less than 10 minutes.
 
 5. Output
-The expected output is a csv file named "Chronic_death_NA_Region_GFED.csv" that contains the impacted regions' total chronic premature deaths attributable to Canadian wildfires on 2023 in Canada and the U.S. The parameter "Region" indicates the impacted regions' name and the parameter "Death_CAfire" indicates the number of estimated chronic premature deaths.
-
+The expected output is a csv file named "GBD_longterm_deaths_NA_national_GFED.csv" that contains the national sum chronic premature deaths attributable to Canadian wildfires of year 2023 in Canada and the U.S. The parameter "Country" indicates the country name, the parameter "Death_total" indicates the number of estimated chronic premature deaths attributed to all PM2.5, the parameter "Death_totalfire" indicates the number of estimated chronic premature deaths attributed to all fire-related PM2.5, and the parameter "Death_CAfire" indicates the number of estimated chronic premature deaths attributed to Canadian wildfire-related PM2.5.
 
